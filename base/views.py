@@ -20,7 +20,7 @@ from rest_framework import serializers
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-# from django.http import JsonResponse
+from django.http import JsonResponse
 
 from.serializers import TaskSerializer
 
@@ -37,11 +37,11 @@ from.serializers import TaskSerializer
 @api_view(['GET'])
 def apiOverview(request):
     api_urls = {
-        'all_tasks': '/',
-        'Add': '/create',
-        'Update': '/update/pk',
-        'Delete': '/task/pk/delete',
-        # 'Task-detail': '/task-detail/pk',
+        'all_tasks': 'http://127.0.0.1:8000/all',
+        'Add': 'http://127.0.0.1:8000/create',
+        'Update': 'http://127.0.0.1:8000/update/pk',
+        'Delete': 'http://127.0.0.1:8000/task/pk/delete',
+        'Task-detail': 'http://127.0.0.1:8000/task-detail/pk',
     }
 
     return Response(api_urls)
@@ -66,8 +66,10 @@ def view_tasks(request):
 
 @api_view(['GET'])
 def taskDetail(request, pk):
-    tasks = Task.objects.get(id=pk)
-    serializer = TaskSerializer(tasks, many=False)
+    if request.method == 'GET':
+        tasks = Task.objects.get(id=pk)
+        print(tasks)
+        serializer = TaskSerializer(tasks, many=False)
     return Response(serializer.data)
 
 
@@ -89,9 +91,11 @@ def add_tasks(request):
 @api_view(['POST'])
 def update_tasks(request, pk):
     task = Task.objects.get(pk=pk)
+    print("Task recupere")
     data = TaskSerializer(instance=task, data=request.data)
 
     if data.is_valid():
+        print("data valide")
         data.save()
         return Response(data.data)
     else:

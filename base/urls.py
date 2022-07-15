@@ -19,13 +19,10 @@ urlpatterns = [
 
     path('', views.apiOverview, name='home'),
     path('all/', views.view_tasks, name='view_tasks'),
-    # path('task-detail/<int:pk>/', views.taskDetail, name="task-detail"),
+    path('task-detail/<int:pk>/', views.taskDetail, name="task-detail"),
     path('create/', views.add_tasks, name='add-tasks'),
-
     path('update/<int:pk>/', views.update_tasks, name='update-tasks'),
     path('task/<int:pk>/delete/', views.delete_tasks, name='delete-Tasks'),
-
-
 
     # ----------------------todolist---------------------------------------------------
     # path('login/', CustomLoginView.as_view(), name='login'),
