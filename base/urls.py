@@ -1,10 +1,12 @@
 from django.contrib.auth.views import LogoutView
 from django.urls import include, path
 
+from knox import views as knox_views
+from .views import LoginAPI
 # from rest_framework import routers
 from . import views
 
-from.views import TaskList, TaskDetail, TaskCreate, TaskUpdate, DeleteView, CustomLoginView, RegisterPage
+from.views import TaskList, TaskDetail, TaskCreate, TaskUpdate, DeleteView, CustomLoginView, RegisterPage, RegisterAPI
 
 
 # router = routers.DefaultRouter()   utilisé pour les class
@@ -15,8 +17,13 @@ urlpatterns = [
 
     # path('', include(router.urls)),  # utilisé pour les class
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    # ----------------------api fonction path------------------------------------------
+    # ----------------------api class path------------------------------------------
+    path('login/', LoginAPI.as_view(), name='Connexion'),
+    path('logout/', knox_views.LogoutView.as_view(), name='Déconnxion'),
+    path('logoutall/', knox_views.LogoutAllView.as_view(), name='Tout déconnecter'),
 
+    # ----------------------api fonction path------------------------------------------
+    path('register/', RegisterAPI.as_view(), name='register'),
     path('', views.apiOverview, name='home'),
     path('all/', views.view_tasks, name='view_tasks'),
     path('task-detail/<int:pk>/', views.taskDetail, name="task-detail"),
